@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beaucute Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <nav class="top-bar" aria-label="Dashboard navigation">
+        <span class="brand-logo">Beaucute <span class="brand-sub">Dashboard</span></span>
+
+        <div class="top-actions">
+            <button type="button" class="nav-pill-btn reset-btn" id="resetDataBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                Reset Data
+            </button>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <span class="eyebrow">BEAUCUTE BUSINESS TRACKER</span>
+            <h1 class="page-title">Financial Overview</h1>
+            <p class="page-sub">Live profit, cash flow, and balance sheet synced with Beaucute shop checkouts.</p>
+        </header>
+
+        <section class="kpi-grid" aria-label="Key financial metrics">
+            <div class="kpi-card">
+                <span class="kpi-label">Total Revenue</span>
+                <div class="kpi-value text-green" id="kpiRevenue">&#8369;0.00</div>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Total Expenses</span>
+                <div class="kpi-value text-red" id="kpiExpenses">&#8369;0.00</div>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Net Income</span>
+                <div class="kpi-value text-blue" id="kpiNetIncome">&#8369;0.00</div>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Cash on Hand</span>
+                <div class="kpi-value text-sky" id="kpiCash">&#8369;0.00</div>
+            </div>
+        </section>
+
+        <section class="charts-grid" aria-label="Financial charts">
+            <div class="panel">
+                <span class="eyebrow">CASH &amp; PROFIT BREAKDOWN</span>
+                <h2 class="panel-title">Revenue vs. Expenses Overview</h2>
+                <div class="chart-wrapper">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="panel">
+                <span class="eyebrow">SHARE OF SALES</span>
+                <h2 class="panel-title">Revenue Allocation</h2>
+                <div class="chart-wrapper">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="bottom-grid" aria-label="Statements and transaction ledger">
+            <div class="panel">
+                <span class="eyebrow">ACCOUNTING REPORTS</span>
+                <h2 class="panel-title">Financial Statements</h2>
+
+                <div class="tabs" role="tablist">
+                    <button type="button" class="tab-btn active" data-tab="incomeStmt" role="tab" aria-selected="true">Income Statement</button>
+                    <button type="button" class="tab-btn" data-tab="cashFlowStmt" role="tab" aria-selected="false">Cash Flow</button>
+                    <button type="button" class="tab-btn" data-tab="balanceSheetStmt" role="tab" aria-selected="false">Balance Sheet</button>
+                </div>
+
+                <div class="statement-view active" id="incomeStmt">
+                    <table class="stmt-table">
+                        <tr>
+                            <td>Gross Sales Revenue (Shop &amp; Manual)</td>
+                            <td class="stmt-amount text-green" id="isRevenue">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Cost of Goods Sold (Plush &amp; Gear Restock)</td>
+                            <td class="stmt-amount text-red" id="isCogs">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gross Profit</strong></td>
+                            <td class="stmt-amount" id="isGross">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Expenses (Packaging, Shipping, Ads)</td>
+                            <td class="stmt-amount text-red" id="isOpex">&#8369;0.00</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Net Income</td>
+                            <td class="stmt-amount" id="isNet">&#8369;0.00</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="statement-view" id="cashFlowStmt">
+                    <table class="stmt-table">
+                        <tr>
+                            <td>Beginning Cash Balance</td>
+                            <td class="stmt-amount">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Cash Inflows (Customer Adoptions &amp; Sales)</td>
+                            <td class="stmt-amount text-green" id="cfInflow">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Cash Outflows (Supplier &amp; Operating Costs)</td>
+                            <td class="stmt-amount text-red" id="cfOutflow">&#8369;0.00</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Ending Cash Balance</td>
+                            <td class="stmt-amount" id="cfEnding">&#8369;0.00</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="statement-view" id="balanceSheetStmt">
+                    <table class="stmt-table">
+                        <tr>
+                            <td><strong>ASSETS:</strong> Cash on Hand</td>
+                            <td class="stmt-amount text-blue" id="bsCash">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ASSETS:</strong> Plush &amp; Desk Gear Inventory Value</td>
+                            <td class="stmt-amount">&#8369;0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LIABILITIES:</strong> Supplier Accounts Payable</td>
+                            <td class="stmt-amount text-red">&#8369;0.00</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Owner's Equity (Assets &minus; Liabilities)</td>
+                            <td class="stmt-amount" id="bsEquity">&#8369;0.00</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <span class="eyebrow">TRANSACTIONS</span>
+                <h2 class="panel-title">Record Manual Entry &amp; Live Ledger</h2>
+
+                <form class="entry-form" id="entryForm">
+                    <input type="text" id="entryDesc" placeholder="Description (e.g., Cinnamoroll Restock, Bubble Wrap)" required>
+                    <div class="form-row">
+                        <select id="entryType" aria-label="Transaction type">
+                            <option value="Revenue">Revenue (Sale)</option>
+                            <option value="COGS">Expense: Inventory (COGS)</option>
+                            <option value="OPEX">Expense: Operating (OPEX)</option>
+                        </select>
+                        <input type="number" id="entryAmount" placeholder="Amount (&#8369;)" min="1" step="0.01" required>
+                    </div>
+                    <button type="submit" class="submit-btn">+ Add Transaction</button>
+                </form>
+
+                <div class="ledger-list" id="ledgerList"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
